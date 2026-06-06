@@ -41,9 +41,9 @@ The dataset was compiled by filtering tracks with fewer than 30 images and perfo
 
 ---
 
-**Best model:** Custom CNN — highest test recall with the lowest overfitting gap.
-
 ## Custom Model Architecture
+
+**Best model:** Custom CNN — highest test recall with the lowest overfitting gap.
 
 The best-performing model uses a deep CNN with progressive filter expansion, Batch Normalization, and aggressive Dropout for regularization.
 
