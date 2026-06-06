@@ -1,10 +1,10 @@
-# 🚦 Traffic Sign Recognition — CV Project
+# Traffic Sign Recognition — CV Project
 
 A computer vision project for **multi-class traffic sign classification** using multiple CNN architectures, trained and evaluated in Google Colab with TensorFlow/Keras.
 
 ---
 
-## 📌 Problem Statement
+## Problem Statement
 
 Traffic sign recognition is a tough real-world problem with high industrial value. This is a **multi-class classification task** with heavily imbalanced data. Signs differ in color, shape, and icons, but some sub-classes (like speed limits) look almost identical.
 
@@ -18,7 +18,7 @@ While humans recognize signs with near-100% accuracy, it remains a real challeng
 
 ---
 
-## 🗂️ Dataset — GTSRB (German Traffic Sign Recognition Benchmark)
+## Dataset — GTSRB (German Traffic Sign Recognition Benchmark)
 
 | Property | Value |
 |----------|-------|
@@ -31,26 +31,20 @@ While humans recognize signs with near-100% accuracy, it remains a real challeng
 
 The dataset was compiled by filtering tracks with fewer than 30 images and performing equidistant sampling to exactly 30 images per track — ensuring diversity and avoiding imbalance from near-identical consecutive frames.
 
-> 📄 Original paper: [Stallkamp et al., GTSRB, IJCNN 2011](https://www.ini.rub.de/upload/file/1470692848_f03494010c16c36bab9e/StallkampEtAl_GTSRB_IJCNN2011.pdf)
+> Original paper: [Stallkamp et al., GTSRB, IJCNN 2011](https://www.ini.rub.de/upload/file/1470692848_f03494010c16c36bab9e/StallkampEtAl_GTSRB_IJCNN2011.pdf)
+
+| Dataset | Link |
+|---------|------|
+| Train set | [Download](https://drive.google.com/file/d/1w3lE2ryD26Q6CPPlxV0Az87RCr6was3E/view?usp=drive_link) |
+| Validation set | [Download](https://drive.google.com/file/d/1zwFnZv1Oo2kVowHXRyyU1AvOfJWnTC1_/view?usp=drive_link) |
+| Test set | [Download](https://drive.google.com/file/d/1w3lE2ryD26Q6CPPlxV0Az87RCr6was3E/view?usp=sharing) |
+
+
+> **Best model:** Custom CNN — highest test recall with the lowest overfitting gap.
 
 ---
 
-## 🧠 Models Compared
-
-Four CNN architectures were trained and evaluated:
-
-| Model | Train Recall | Test Recall | Overfit Gap |
-|-------|:-----------:|:-----------:|:-----------:|
-| Basis | 98.8% | 86.7% | 12.3% |
-| LeNet | 99.8% | 88.8% | 11.0% |
-| LeNet_pp | 99.3% | 90.4% | 8.9% |
-| **Custom** | **99.8%** | **95.2%** | **4.6%** ✅ |
-
-> ✅ **Best model:** Custom CNN — highest test recall with the lowest overfitting gap.
-
----
-
-## 🏗️ Custom Model Architecture
+## Custom Model Architecture
 
 The best-performing model uses a deep CNN with progressive filter expansion, Batch Normalization, and aggressive Dropout for regularization.
 
@@ -103,18 +97,17 @@ Optimizer: Adam (lr=1e-3)
 Metric:    Accuracy
 ```
 
----
 
 ## 📊 Results
-
-### Recall (Train / Test / Overfit%)
-![Recall](results/recall.png)
 
 ### Accuracy
 ![Accuracy](results/accuracy.png)
 
 ### Precision
 ![Precision](results/Precision.png)
+
+### Recall
+![Recall](results/recall.png)
 
 ### F1 Score
 ![F1](results/F1.png)
@@ -149,33 +142,6 @@ CV_project-Traffic_sign_recognition/
 └── README.md
 ```
 
----
-
-## 🚀 Quick Start
-
-### Run in Google Colab
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Eruhonya/CV_project-Traffic_sign_recognition/blob/main/notebooks/traffic_sign_classification.ipynb)
-
-### Local Setup
-
-```bash
-git clone https://github.com/Eruhonya/CV_project-Traffic_sign_recognition.git
-cd CV_project-Traffic_sign_recognition
-pip install -r requirements.txt
-```
-
-### Dependencies
-
-```
-tensorflow>=2.x
-numpy
-matplotlib
-opencv-python
-scikit-learn
-pandas
-```
-
----
 
 ## 🛠️ Tech Stack
 
@@ -187,24 +153,9 @@ pandas
 | Python 3 | Language |
 | Matplotlib | Visualization |
 
----
-
-## 📈 Future Work
-
-- [ ] Data augmentation pipeline (brightness, noise, blur)
-- [ ] Transfer learning (MobileNetV2, EfficientNet)
-- [ ] Real-time detection via webcam
-- [ ] Deploy as web or mobile app
-- [ ] Extend to other country sign standards
 
 ---
 
 ## 👤 Author
 
 **Eruhonya** — [github.com/Eruhonya](https://github.com/Eruhonya)
-
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
