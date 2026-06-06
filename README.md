@@ -1,44 +1,133 @@
 # 🚦 Traffic Sign Recognition — CV Project
 
-A computer vision project for **traffic sign classification** using multiple CNN architectures trained and evaluated in Google Colab.
+A computer vision project for **multi-class traffic sign classification** using multiple CNN architectures, trained and evaluated in Google Colab with TensorFlow/Keras.
 
 ---
 
-## 📌 Overview
+## 📌 Problem Statement
 
-This project compares four CNN-based models for traffic sign recognition, analyzing their accuracy, recall, and overfitting behavior across train/test splits.
+Traffic sign recognition is a tough real-world problem with high industrial value. This is a **multi-class classification task** with heavily imbalanced data. Signs differ in color, shape, and icons, but some sub-classes (like speed limits) look almost identical.
+
+The classifier must handle:
+- Lighting shifts and weather conditions
+- Partial occlusions and rotations
+- Large scale variations
+- 43 visually diverse classes
+
+While humans recognize signs with near-100% accuracy, it remains a real challenge for computer vision.
+
+---
+
+## 🗂️ Dataset — GTSRB (German Traffic Sign Recognition Benchmark)
+
+| Property | Value |
+|----------|-------|
+| Total images | ~50,000 |
+| Classes | 43 |
+| Original source | ~133,000 labeled images, 2,416 sign instances |
+| Recording | ~10 hours of driving in Germany (2010) |
+| Camera | Prosilica GC 1380CH, 1360×1024px, 25 fps |
+| Seasons | March, October, November |
+
+The dataset was compiled by filtering tracks with fewer than 30 images and performing equidistant sampling to exactly 30 images per track — ensuring diversity and avoiding imbalance from near-identical consecutive frames.
+
+> 📄 Original paper: [Stallkamp et al., GTSRB, IJCNN 2011](https://www.ini.rub.de/upload/file/1470692848_f03494010c16c36bab9e/StallkampEtAl_GTSRB_IJCNN2011.pdf)
+
+---
+
+## 🧠 Models Compared
+
+Four CNN architectures were trained and evaluated:
 
 | Model | Train Recall | Test Recall | Overfit Gap |
-|-------|-------------|-------------|-------------|
+|-------|:-----------:|:-----------:|:-----------:|
 | Basis | 98.8% | 86.7% | 12.3% |
 | LeNet | 99.8% | 88.8% | 11.0% |
 | LeNet_pp | 99.3% | 90.4% | 8.9% |
 | **Custom** | **99.8%** | **95.2%** | **4.6%** ✅ |
 
-> **Best result:** Custom architecture achieved **95.2% test recall** with the lowest overfitting gap of only 4.6%.
+> ✅ **Best model:** Custom CNN — highest test recall with the lowest overfitting gap.
 
 ---
 
-## 🧠 Models
+## 🏗️ Custom Model Architecture
 
-### 1. Basis
-A simple baseline CNN used as a reference point. High training recall (98.8%) but significant overfit (12.3%).
+The best-performing model uses a deep CNN with progressive filter expansion, Batch Normalization, and aggressive Dropout for regularization.
 
-### 2. LeNet
-Classic LeNet architecture adapted for traffic sign classification. Slightly better test performance than Basis.
+### Preprocessing Pipeline
 
-### 3. LeNet_pp (LeNet++)
-An improved version of LeNet with additional regularization/augmentation. Reduces overfitting to 8.9%.
+```
+Raw image
+  → CLAHE (Contrast Limited Adaptive Histogram Equalization, clipLimit=2.0, tileGrid=8×8)
+  → Gaussian Denoising
+  → Z-score Normalization (per-channel mean & std from train set)
+```
 
-### 4. Custom ⭐
-A custom-designed CNN architecture. Best generalization with 95.2% test recall and minimal overfit (4.6%).
+### Data Augmentation (ImageDataGenerator)
+
+| Technique | Value |
+|-----------|-------|
+| Rotation | ±10° |
+| Zoom | 10% |
+| Width shift | 10% |
+| Height shift | 10% |
+| Shear | 10° |
+
+### Network Architecture
+
+```
+Input
+  │
+  ├─ Conv2D(32, 3×3, same) → BatchNorm → ReLU
+  ├─ Conv2D(32, 3×3, same) → BatchNorm → ReLU
+  ├─ MaxPooling2D(2×2)
+  ├─ Dropout(0.25)
+  │
+  ├─ Conv2D(64, 3×3, same) → BatchNorm → ReLU
+  ├─ Conv2D(64, 3×3, same) → BatchNorm → ReLU
+  ├─ MaxPooling2D(2×2)
+  ├─ Dropout(0.35)
+  │
+  ├─ Conv2D(128, 3×3, same) → BatchNorm → ReLU
+  ├─ MaxPooling2D(2×2)
+  ├─ Dropout(0.40)
+  │
+  ├─ Flatten
+  ├─ Dense(256) → BatchNorm → ReLU
+  ├─ Dropout(0.50)
+  │
+  └─ Dense(43, softmax)
+
+Loss:      Sparse Categorical Crossentropy
+Optimizer: Adam (lr=1e-3)
+Metric:    Accuracy
+```
+
+---
+
+## 📊 Results
+
+### Recall (Train / Test / Overfit%)
+![Recall](results/recall.png)
+
+### Accuracy
+![Accuracy](results/accuracy.png)
+
+### Precision
+![Precision](results/Precision.png)
+
+### F1 Score
+![F1](results/F1.png)
+
+### Prediction Example
+![Predict](results/predict.png)
 
 ---
 
 ## 📁 Project Structure
 
 ```
-traffic-sign-recognition/
+CV_project-Traffic_sign_recognition/
 │
 ├── notebooks/
 │   └── traffic_sign_classification.ipynb   # Main Colab notebook
@@ -46,49 +135,39 @@ traffic-sign-recognition/
 ├── models/
 │   ├── basis.py          # Baseline CNN
 │   ├── lenet.py          # LeNet architecture
-│   ├── lenet_pp.py       # LeNet++ architecture
+│   ├── lenet_pp.py       # LeNet++ (improved LeNet)
 │   └── custom.py         # Custom CNN architecture
 │
-├── datasets/
-│   ├── dataset_1/        # Dataset 1
-│   ├── dataset_2/        # Dataset 2
-│   └── dataset_3/        # Dataset 3
-│
 ├── results/
-│   └── recall_comparison.png   # Train/Test/Overfit chart
+│   ├── accuracy.png
+│   ├── Precision.png
+│   ├── F1.png
+│   ├── recall.png
+│   ├── predict.png
+│   └── pic1.jpg
 │
 └── README.md
 ```
 
 ---
 
-## 🗂️ Datasets
-
-The project uses **3 datasets** of traffic signs for training and evaluation. Data is split into train/test sets for each experiment.
-
-> Datasets are not included in this repository due to size. Download links or instructions below.
-
-<!-- TODO: Add dataset download links or Kaggle/Drive links here -->
-
----
-
 ## 🚀 Quick Start
 
 ### Run in Google Colab
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YOUR_USERNAME/YOUR_REPO/blob/main/notebooks/traffic_sign_classification.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Eruhonya/CV_project-Traffic_sign_recognition/blob/main/notebooks/traffic_sign_classification.ipynb)
 
 ### Local Setup
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/traffic-sign-recognition.git
-cd traffic-sign-recognition
+git clone https://github.com/Eruhonya/CV_project-Traffic_sign_recognition.git
+cd CV_project-Traffic_sign_recognition
 pip install -r requirements.txt
 ```
 
 ### Dependencies
 
 ```
-tensorflow>=2.x   # or pytorch
+tensorflow>=2.x
 numpy
 matplotlib
 opencv-python
@@ -98,40 +177,31 @@ pandas
 
 ---
 
-## 📊 Results
-
-![Recall Comparison](results/recall_comparison.png)
-
-The chart above shows **Recall** for Train and Test sets, along with the **Overfit %** for each model.
-
-Key findings:
-- All models achieve near-perfect training recall (~99%)
-- The **Custom model** generalizes best with the smallest train-test gap
-- LeNet++ shows a good balance between complexity and generalization
-
----
-
 ## 🛠️ Tech Stack
 
-- **Platform:** Google Colab
-- **Framework:** TensorFlow / Keras
-- **Language:** Python 3
-- **Visualization:** Matplotlib
+| Tool | Purpose |
+|------|---------|
+| TensorFlow / Keras | Model building & training |
+| OpenCV (CLAHE) | Image contrast enhancement |
+| Google Colab | Training environment |
+| Python 3 | Language |
+| Matplotlib | Visualization |
 
 ---
 
 ## 📈 Future Work
 
-- [ ] Add data augmentation pipeline
-- [ ] Try transfer learning (MobileNet, EfficientNet)
-- [ ] Deploy as a web app or mobile app
-- [ ] Expand dataset coverage (more sign types)
+- [ ] Data augmentation pipeline (brightness, noise, blur)
+- [ ] Transfer learning (MobileNetV2, EfficientNet)
+- [ ] Real-time detection via webcam
+- [ ] Deploy as web or mobile app
+- [ ] Extend to other country sign standards
 
 ---
 
 ## 👤 Author
 
-<!-- Add your name/GitHub profile here -->
+**Eruhonya** — [github.com/Eruhonya](https://github.com/Eruhonya)
 
 ---
 
