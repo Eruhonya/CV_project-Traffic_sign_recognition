@@ -39,10 +39,9 @@ The dataset was compiled by filtering tracks with fewer than 30 images and perfo
 | Validation set | [Download](https://drive.google.com/file/d/1zwFnZv1Oo2kVowHXRyyU1AvOfJWnTC1_/view?usp=drive_link) |
 | Test set | [Download](https://drive.google.com/file/d/1w3lE2ryD26Q6CPPlxV0Az87RCr6was3E/view?usp=sharing) |
 
-
-> **Best model:** Custom CNN — highest test recall with the lowest overfitting gap.
-
 ---
+
+**Best model:** Custom CNN — highest test recall with the lowest overfitting gap.
 
 ## Custom Model Architecture
 
